@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NexFlow
 
-## Getting Started
+NexFlow is a Next.js 15 app using the App Router, Prisma, tRPC, and Better Auth. It includes a reusable UI system (Radix + Tailwind) and an auth flow under `src/features/auth`.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- App Router pages with colocated API routes
+- tRPC server/client integration with TanStack Query
+- Better Auth with Prisma adapter (email + password)
+- Prisma schema for users, sessions, accounts, and verification tokens
+- Radix-based UI kit under `src/components/ui`
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Next.js 15, React 19, TypeScript
+- Prisma (PostgreSQL)
+- tRPC + TanStack Query
+- Better Auth
+- Tailwind CSS + Radix UI
+- Biome for linting/formatting
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Project Structure
 
-## Learn More
+- `src/app` - App Router pages and route handlers
+- `src/trpc` - tRPC setup (router, client, server helpers)
+- `src/features/auth` - auth forms and UI
+- `src/lib` - auth and database helpers
+- `src/components/ui` - UI primitives
+- `prisma` - schema and migrations
 
-To learn more about Next.js, take a look at the following resources:
+## Setup
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Install dependencies:
+	```bash
+	npm install
+	```
+2. Create an `.env` file with your database connection string:
+	```bash
+	DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DB"
+	```
+3. Apply migrations and generate the Prisma client:
+	```bash
+	npx prisma migrate dev
+	```
+4. Start the dev server:
+	```bash
+	npm run dev
+	```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Open http://localhost:3000 to view the app.
 
-## Deploy on Vercel
+## Scripts
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `npm run dev` - start the dev server (Turbopack)
+- `npm run build` - build for production (Turbopack)
+- `npm run start` - start the production server
+- `npm run lint` - run Biome checks
+- `npm run format` - format with Biome
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Notes
+
+- Prisma client output is generated under `src/generated/prisma`.
+- Update the database provider or connection details in `prisma/schema.prisma` as needed.
