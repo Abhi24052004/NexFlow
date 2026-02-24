@@ -3,7 +3,7 @@ import { requireUnauth } from '@/lib/auth-utils';
 import Link from 'next/link';
 import Image from 'next/image';
 const Page=async()=>{
-    await requireUnauth();
+    // await requireUnauth();
     return(
         <RegisterForm />
     )
