@@ -65,109 +65,123 @@ export function RegisterForm() {
             }
         )
     };
-        const isPending = form.formState.isSubmitting;
-        return (
-            <div className="flex flex-col gap-6">
-                <Card>
-                    <CardHeader className="text-center">
-                        <CardTitle>
-                            Get Started
-                        </CardTitle>
-                        <CardDescription>
-                            Create an account to get started
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <Form {...form}>
-                            <form onSubmit={form.handleSubmit(onSubmit)}>
-                                <div className="grid gap-6">
-                                    <div className="flex flex-col gap-4">
-                                        <Button
-                                            variant="outline"
-                                            className="w-full"
-                                            type="button"
-                                            disabled={isPending}
-                                        >
-                                            Continue with GitHub
-                                        </Button>
-                                        <Button
-                                            variant="outline"
-                                            className="w-full"
-                                            type="button"
-                                            disabled={isPending}
-                                        >
-                                            Continue with Google
-                                        </Button>
-                                    </div>
-                                    <div className="grid gap-6">
-                                        <FormField
-                                            control={form.control}
-                                            name="email"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel>Email</FormLabel>
-                                                    <FormControl>
-                                                        <Input
-                                                            type="email"
-                                                            placeholder="mail@gmail.com"
-                                                            {...field}
-                                                        />
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
+    const isPending = form.formState.isSubmitting;
+    return (
+        <div className="flex flex-col gap-6">
+            <Card>
+                <CardHeader className="text-center">
+                    <CardTitle>
+                        Get Started
+                    </CardTitle>
+                    <CardDescription>
+                        Create an account to get started
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)}>
+                            <div className="grid gap-6">
+                                <div className="flex flex-col gap-4">
+                                    <Button
+                                        variant="outline"
+                                        className="w-full"
+                                        type="button"
+                                        disabled={isPending}
+                                    >
+                                        <Image
+                                            src="/logos/github.svg"
+                                            alt="GitHub Logo"
+                                            width={20}
+                                            height={20}
+                                            className="mr-2"
                                         />
-                                        <FormField
-                                            control={form.control}
-                                            name="password"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel>Password</FormLabel>
-                                                    <FormControl>
-                                                        <Input
-                                                            type="password"
-                                                            placeholder="***********"
-                                                            {...field}
-                                                        />
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
+                                        Continue with GitHub
+                                    </Button>
+                                    <Button
+                                        variant="outline"
+                                        className="w-full"
+                                        type="button"
+                                        disabled={isPending}
+                                    >
+                                        <Image
+                                            src="/logos/google.svg"
+                                            alt="Google Logo"
+                                            width={20}
+                                            height={20}
+                                            className="mr-2"
                                         />
-                                        <FormField
-                                            control={form.control}
-                                            name="confirmPassword"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel>Confirm Password</FormLabel>
-                                                    <FormControl>
-                                                        <Input
-                                                            type="password"
-                                                            placeholder="***********"
-                                                            {...field}
-                                                        />
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
-                                        <Button type="submit" className="w-full" disabled={isPending}>
-                                            Sign Up
-                                        </Button>
-                                    </div>
-                                    <div className="text-center text-sm">
-                                        Already have an account?{" "}
-                                        <Link href="/login"
-                                            className="underline underline-offset-4 ">
-                                            login
-                                        </Link>
-                                    </div>
-
+                                        Continue with Google
+                                    </Button>
                                 </div>
-                            </form>
-                        </Form>
-                    </CardContent>
-                </Card>
-            </div>
-        );
-    }
+                                <div className="grid gap-6">
+                                    <FormField
+                                        control={form.control}
+                                        name="email"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Email</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        type="email"
+                                                        placeholder="mail@gmail.com"
+                                                        {...field}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name="password"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Password</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        type="password"
+                                                        placeholder="***********"
+                                                        {...field}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name="confirmPassword"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Confirm Password</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        type="password"
+                                                        placeholder="***********"
+                                                        {...field}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <Button type="submit" className="w-full" disabled={isPending}>
+                                        Sign Up
+                                    </Button>
+                                </div>
+                                <div className="text-center text-sm">
+                                    Already have an account?{" "}
+                                    <Link href="/login"
+                                        className="underline underline-offset-4 ">
+                                        login
+                                    </Link>
+                                </div>
+
+                            </div>
+                        </form>
+                    </Form>
+                </CardContent>
+            </Card>
+        </div>
+    );
+}
