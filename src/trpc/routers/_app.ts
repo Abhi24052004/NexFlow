@@ -2,7 +2,17 @@ import prisma from '@/lib/db';
 import { baseProcedure, createTRPCRouter, protectedProcedure } from '../init';
 import { create } from 'node:domain';
 import { inngest } from "@/inngest/client";
+import { google } from '@ai-sdk/google';
+import { generateText } from 'ai';
+
 export const appRouter = createTRPCRouter({
+  testAi: protectedProcedure
+    .mutation(async () => {
+      await inngest.send({
+        name: "execute/ai",
+      });
+      return {success:true};
+    }),
   getUsers: protectedProcedure
     .query(({ ctx }) => {
       return prisma.user.findMany({
@@ -10,7 +20,7 @@ export const appRouter = createTRPCRouter({
           id: ctx.auth.user.id
         }
       });
-    }), 
+    }),
   getWorkflows: protectedProcedure
     .query(({ ctx }) => {
       return prisma.workflow.findMany({});
@@ -33,7 +43,7 @@ export const appRouter = createTRPCRouter({
       // // generate summary
       // await new Promise((resolve) => setTimeout(resolve, 5000));
 
-      return ({success:true})
+      return ({ success: true })
     })
 });
 // export type definition of API
