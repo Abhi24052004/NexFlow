@@ -5,3 +5,5 @@ ERROR [portable_pty::win::psuedocon] CreateProcessW `"\"npm run inngest:dev\"\0"
 ERROR [portable_pty::win::psuedocon] CreateProcessW `"\"npm run dev\"\0"` in cwd `Some("D:\\FullSemProj\\nexflow\0")` failed: The system cannot find the file specified. (os error 2)
 ERROR [lib::error] Error: channel closed
 ERROR [lib::error] Error: channel closed
+ERROR [lib::error] Error: channel closed
+ERROR [lib::error] Error: channel closed
