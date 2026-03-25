@@ -1,14 +1,21 @@
-import { requireAuth } from "@/lib/auth-utils";
+import { WorkflowsList, WorkflowsContainer } from "@/features/workflows/components/workflows";
+import { prefetchWorkflows } from "@/features/workflows/server/prefetch";
+import { HydrateClient } from "@/trpc/server";
+import { ErrorBoundary } from "react-error-boundary";
+import { Suspense } from "react";
 
-const Page=async()=>{
-    await requireAuth();
-    return(
-        <div className="flex flex-col gap-4">
-            <h1 className="text-2xl font-bold">Workflows</h1>
-            <p className="text-muted-foreground">
-                Manage your workflows here.
-            </p>
-        </div>
+const Page = () => {
+    prefetchWorkflows();
+    return (
+        <WorkflowsContainer>
+            <HydrateClient>
+                <ErrorBoundary fallback={<div>Something went wrong</div>}>
+                    <Suspense fallback={<div>Loading...</div>}>
+                        <WorkflowsList />
+                    </Suspense>
+                </ErrorBoundary>
+            </HydrateClient>
+        </WorkflowsContainer>
     )
 }
 export default Page;

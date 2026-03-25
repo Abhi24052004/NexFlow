@@ -23,6 +23,7 @@ import {
     SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { authClient } from "@/lib/auth-client";
+import { useHasActiveSubscription } from "@/features/subscriptions/hooks/use-subscription";
 
 
 const menuItems = [
@@ -60,6 +61,7 @@ export const AppSidebar = () => {
             }
         });
     }
+    const { hasActiveSubscription, isLoading } = useHasActiveSubscription();
     return (
         <Sidebar collapsible="icon">
             <SidebarHeader>
@@ -94,7 +96,7 @@ export const AppSidebar = () => {
                                             asChild
                                             className="gap-x-4 h-10 px-4"
                                         >
-                                            <Link href={item.url} prefetch={true}>
+                                            <Link href={item.url} prefetch>
                                                 <item.icon className="size-4" />
                                                 <span>{item.title}</span>
                                             </Link>
@@ -108,14 +110,16 @@ export const AppSidebar = () => {
             </SidebarContent>
             <SidebarFooter>
                 <SidebarMenu>
+                    {!isLoading && !hasActiveSubscription && (
                     <SidebarMenuItem>
-                        <SidebarMenuButton tooltip="Upgrade to Pro" onClick={() => { }} className="gap-x-4 h-10 px-4">
+                        <SidebarMenuButton tooltip="Upgrade to Pro" onClick={() => authClient.checkout({slug: "nexflow-Pro"})} className="gap-x-4 h-10 px-4">
                             <StarIcon className="h-4 w-4" />
                             <span>Upgrade to pro</span>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
+                    )}
                     <SidebarMenuItem>
-                        <SidebarMenuButton tooltip="Billing Portal" onClick={() => { }} className="gap-x-4 h-10 px-4">
+                        <SidebarMenuButton tooltip="Billing Portal" onClick={() => authClient.customer.portal()} className="gap-x-4 h-10 px-4">
                             <CreditCardIcon className="h-4 w-4" />
                             <span>Billing Portal</span>
                         </SidebarMenuButton>

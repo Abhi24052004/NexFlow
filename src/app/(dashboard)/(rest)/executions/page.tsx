@@ -1,7 +1,4 @@
-import { requireAuth } from "@/lib/auth-utils";
-
-const Page=async ()=>{
-    await requireAuth();
+const Page=()=>{
     return(
         <div className="flex flex-col gap-4">
             <h1 className="text-2xl font-bold">Executions</h1>
