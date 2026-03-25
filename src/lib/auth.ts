@@ -1,7 +1,5 @@
 import { betterAuth } from 'better-auth';
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { polar, checkout, portal, usage, webhooks } from "@polar-sh/better-auth";
-import { polarClient } from './polar';
 import prisma from "@/lib/db";
 
 export const auth = betterAuth({
@@ -17,25 +15,5 @@ export const auth = betterAuth({
         process.env.NEXT_PUBLIC_APP_URL ||
         "http://localhost:3000",
     basePath: "/api/auth",
-    trustHost: true,
-
-    plugins: [
-        polar({
-            client: polarClient,
-            createCustomerOnSignUp: true,
-            use: [
-                checkout({
-                    products: [
-                        {
-                            productId: "66d669c9-1725-4f66-a377-c7ec8f08d95b",
-                            slug: "nexflow-Pro" // Custom slug for easy reference in Checkout URL, e.g. /checkout/nexflow-Pro
-                        }
-                    ],
-                    successUrl: process.env.POLAR_SUCCESS_URL,
-                    authenticatedUsersOnly: true
-                }),
-                portal()
-            ],
-        })
-    ]
+    trustHost: true
 });
