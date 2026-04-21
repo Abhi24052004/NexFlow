@@ -3,15 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
-    "start": "next start",
-    "lint": "biome check",
-    "ngrok:dev": "ngrok http --url=joane-subservient-correspondently.ngrok-free.dev 3000",
-    "format": "biome format --write",
-    "inngest:dev": "inngest-cli dev",
-    "dev:all": "mprocs"
-  },
+  "dev": "next dev --turbopack",
+  "build": "prisma generate && next build --turbopack",
+  "start": "next start",
+  "lint": "biome check",
+  "ngrok:dev": "ngrok http --url=joane-subservient-correspondently.ngrok-free.dev 3000",
+  "format": "biome format --write",
+  "inngest:dev": "inngest-cli dev",
+  "dev:all": "mprocs",
+  "postinstall": "prisma generate"
+},
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.64",
     "@ai-sdk/google": "^3.0.30",
