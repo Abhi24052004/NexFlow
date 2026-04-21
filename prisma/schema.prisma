@@ -8,16 +8,17 @@ datasource db {
 }
 
 model User {
-  id            String    @id
+  id            String       @id
   name          String
   email         String
-  emailVerified Boolean   @default(false)
+  emailVerified Boolean      @default(false)
   image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
   sessions      Session[]
   accounts      Account[]
   workflows     Workflow[]
+  credentials   Credential[]
 
   @@unique([email])
   @@map("user")
@@ -72,14 +73,14 @@ model Verification {
 }
 
 model Workflow {
-  id   String @id @default(cuid())
-  name String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  nodes Node[]
+  id          String       @id @default(cuid())
+  name        String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  nodes       Node[]
   connections Connection[]
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 enum NodeType {
@@ -87,40 +88,69 @@ enum NodeType {
   MANUAL_TRIGGER
   HTTP_REQUEST
   GOOGLE_FORM_TRIGGER
+  GOOGLE_SHEET_TRIGGER
+  GMAIL_TRIGGER
+  ANTHROPIC
+  GEMINI
+  OPENAI
+  DISCORD
+  SLACK
 }
 
 model Node {
-  id String @id @default(cuid())
+  id         String   @id @default(cuid())
   workflowId String
-  workflow Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  workflow   Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
 
-  name String
-  type NodeType
+  name     String
+  type     NodeType
   position Json
-  data Json @default("{}")
+  data     Json     @default("{}")
 
   outputConnections Connection[] @relation("FromNode")
-  inputConnections Connection[] @relation("ToNode")
+  inputConnections  Connection[] @relation("ToNode")
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  credentialId String?
+  credential   Credential? @relation(fields: [credentialId], references: [id])
 }
 
 model Connection {
-  id String @id @default(cuid())
+  id         String   @id @default(cuid())
   workflowId String
-  workflow Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  workflow   Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
 
   fromNodeId String
-  fromNode Node @relation("FromNode", fields: [fromNodeId], references: [id], onDelete: Cascade)
-  toNodeId String
-  toNode Node @relation("ToNode", fields: [toNodeId], references: [id], onDelete: Cascade)
+  fromNode   Node   @relation("FromNode", fields: [fromNodeId], references: [id], onDelete: Cascade)
+  toNodeId   String
+  toNode     Node   @relation("ToNode", fields: [toNodeId], references: [id], onDelete: Cascade)
 
   fromOutput String @default("main")
-  toInput String @default("main")
+  toInput    String @default("main")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@unique([fromNodeId, toNodeId, fromOutput, toInput])
+}
+
+model Credential {
+  id        String         @id @default(cuid())
+  name      String
+  value     String
+  type      CredentialType
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  Node Node[]
+}
+
+enum CredentialType {
+  OPENAI
+  ANTHROPIC
+  GEMINI
 }

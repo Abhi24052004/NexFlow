@@ -40,11 +40,11 @@ const menuItems = [
                 icon: KeyIcon,
                 url: "/credentials",
             },
-            {
-                title: "Executions",
-                icon: HistoryIcon,
-                url: "/executions",
-            }
+            // {
+            //     title: "Executions",
+            //     icon: HistoryIcon,
+            //     url: "/executions",
+            // }
         ]
     }
 ]
@@ -112,7 +112,7 @@ export const AppSidebar = () => {
                 <SidebarMenu>
                     {!isLoading && !hasActiveSubscription && (
                     <SidebarMenuItem>
-                        <SidebarMenuButton tooltip="Upgrade to Pro" onClick={() => authClient.checkout({slug: "nexflow-Pro"})} className="gap-x-4 h-10 px-4">
+                        <SidebarMenuButton tooltip="Upgrade to Pro" onClick={() => authClient.checkout({slug: "Nexflow-Pro"})} className="gap-x-4 h-10 px-4">
                             <StarIcon className="h-4 w-4" />
                             <span>Upgrade to pro</span>
                         </SidebarMenuButton>

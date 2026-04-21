@@ -49,6 +49,7 @@ export function RegisterForm() {
     const signInGithub = async () => {
         await authClient.signIn.social({
             provider: "github",
+            callbackURL: "/",
         }, {
             onSuccess: () => {
                 router.push("/");
@@ -62,6 +63,7 @@ export function RegisterForm() {
     const signInGoogle = async () => {
         await authClient.signIn.social({
             provider: "google",
+            callbackURL: "/",
         }, {
             onSuccess: () => {
                 router.push("/");

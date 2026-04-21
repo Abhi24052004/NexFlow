@@ -1,0 +1,120 @@
+{\rtf1\ansi\deff0
+{\fonttbl{\f0 Calibri;}{\f1 Consolas;}}
+\fs22
+\b NexFlow Data Dictionary\b0\par
+\par
+\b Project:\b0 NexFlow\par
+\b Database:\b0 PostgreSQL (via Prisma)\par
+\b Prepared On:\b0 29 March 2026\par
+\par
+\b 1. User\b0\par
+\b Purpose:\b0 Stores user profile and authentication identity.\par
+\par
+id | String | Not Null | PK | - | Unique user identifier\par
+name | String | Not Null | - | - | User full/display name\par
+email | String | Not Null | Unique | - | User email address\par
+emailVerified | Boolean | Not Null | - | false | Email verification status\par
+image | String | Nullable | - | null | Profile image URL\par
+createdAt | DateTime | Not Null | - | now() | Record creation time\par
+updatedAt | DateTime | Not Null | - | updatedAt | Last update time\par
+\par
+Relationships:\par
+- One User has many Sessions\par
+- One User has many Accounts\par
+- One User has many Workflows\par
+\par
+\b 2. Session\b0\par
+\b Purpose:\b0 Stores active login sessions and tokens.\par
+\par
+id | String | Not Null | PK | - | Session ID\par
+expiresAt | DateTime | Not Null | - | - | Session expiry\par
+token | String | Not Null | Unique | - | Session token\par
+createdAt | DateTime | Not Null | - | now() | Created time\par
+updatedAt | DateTime | Not Null | - | updatedAt | Updated time\par
+ipAddress | String | Nullable | - | null | Client IP\par
+userAgent | String | Nullable | - | null | Browser/device info\par
+userId | String | Not Null | FK -> User.id, indexed | - | Session owner\par
+\par
+\b 3. Account\b0\par
+\b Purpose:\b0 Stores linked authentication provider accounts.\par
+\par
+id | String | Not Null | PK | - | Account record ID\par
+accountId | String | Not Null | - | - | Provider-side account ID\par
+providerId | String | Not Null | - | - | Auth provider name/id\par
+userId | String | Not Null | FK -> User.id, indexed | - | Owning user\par
+accessToken | String | Nullable | - | null | OAuth access token\par
+refreshToken | String | Nullable | - | null | OAuth refresh token\par
+idToken | String | Nullable | - | null | OIDC ID token\par
+accessTokenExpiresAt | DateTime | Nullable | - | null | Access token expiry\par
+refreshTokenExpiresAt | DateTime | Nullable | - | null | Refresh token expiry\par
+scope | String | Nullable | - | null | OAuth scopes\par
+password | String | Nullable | - | null | Password hash (if local auth)\par
+createdAt | DateTime | Not Null | - | now() | Created time\par
+updatedAt | DateTime | Not Null | - | updatedAt | Updated time\par
+\par
+\b 4. Verification\b0\par
+\b Purpose:\b0 Stores verification and recovery tokens.\par
+\par
+id | String | Not Null | PK | - | Verification record ID\par
+identifier | String | Not Null | Indexed | - | Target identity (email, etc.)\par
+value | String | Not Null | - | - | Verification token/code\par
+expiresAt | DateTime | Not Null | - | - | Expiry time\par
+createdAt | DateTime | Not Null | - | now() | Created time\par
+updatedAt | DateTime | Not Null | - | updatedAt | Updated time\par
+\par
+\b 5. Workflow\b0\par
+\b Purpose:\b0 Stores workflow metadata owned by a user.\par
+\par
+id | String | Not Null | PK | cuid() | Workflow ID\par
+name | String | Not Null | - | - | Workflow name\par
+createdAt | DateTime | Not Null | - | now() | Created time\par
+updatedAt | DateTime | Not Null | - | updatedAt | Updated time\par
+userId | String | Not Null | FK -> User.id | - | Owner user\par
+\par
+Relationships:\par
+- One Workflow has many Nodes\par
+- One Workflow has many Connections\par
+\par
+\b 6. Node\b0\par
+\b Purpose:\b0 Stores workflow nodes (trigger/action/AI).\par
+\par
+id | String | Not Null | PK | cuid() | Node ID\par
+workflowId | String | Not Null | FK -> Workflow.id | - | Parent workflow\par
+name | String | Not Null | - | - | Node label\par
+type | NodeType | Not Null | Enum | - | Node type\par
+position | Json | Not Null | - | - | Canvas coordinates\par
+data | Json | Not Null | - | {} | Node config/payload\par
+createdAt | DateTime | Not Null | - | now() | Created time\par
+updatedAt | DateTime | Not Null | - | updatedAt | Updated time\par
+\par
+Relationships:\par
+- One Node can be source of many Connections\par
+- One Node can be target of many Connections\par
+\par
+\b 7. Connection\b0\par
+\b Purpose:\b0 Stores directed edges between nodes.\par
+\par
+id | String | Not Null | PK | cuid() | Connection ID\par
+workflowId | String | Not Null | FK -> Workflow.id | - | Parent workflow\par
+fromNodeId | String | Not Null | FK -> Node.id | - | Source node\par
+toNodeId | String | Not Null | FK -> Node.id | - | Target node\par
+fromOutput | String | Not Null | Composite unique part | main | Source handle\par
+toInput | String | Not Null | Composite unique part | main | Target handle\par
+createdAt | DateTime | Not Null | - | now() | Created time\par
+updatedAt | DateTime | Not Null | - | updatedAt | Updated time\par
+\par
+Composite unique constraint:\par
+(fromNodeId, toNodeId, fromOutput, toInput)\par
+\par
+\b 8. Enum Dictionary: NodeType\b0\par
+\par
+INITIAL | Initial/default workflow node\par
+MANUAL_TRIGGER | User-triggered execution node\par
+HTTP_REQUEST | HTTP call action node\par
+GOOGLE_FORM_TRIGGER | Trigger from Google Form webhook\par
+GMAIL_TRIGGER | Trigger from Gmail webhook\par
+ANTHROPIC | Anthropic AI generation node\par
+GEMINI | Google Gemini AI generation node\par
+OPENAI | OpenAI AI generation node\par
+\par
+}
