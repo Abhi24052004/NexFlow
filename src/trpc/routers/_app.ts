@@ -6,18 +6,19 @@ import { google } from '@ai-sdk/google';
 import { generateText } from 'ai';
 import { workflowRouter } from '@/features/workflows/server/routers';
 import { credentialsRouter } from '@/features/credentials/server/routers';
+import { executionsRouter } from '@/features/executions/server/routers';
 
 export const appRouter = createTRPCRouter({
-    credentials: credentialsRouter,
-
-  workflows:workflowRouter,
+  credentials: credentialsRouter,
+  workflows: workflowRouter,
+  executions: executionsRouter,
 
   testAi: protectedProcedure
     .mutation(async () => {
       await inngest.send({
         name: "execute/ai",
       });
-      return {success:true};
+      return { success: true };
     }),
   getUsers: protectedProcedure
     .query(({ ctx }) => {

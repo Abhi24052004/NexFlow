@@ -5,6 +5,7 @@ import { createOpenAI } from "@ai-sdk/openai";
 import type { NodeExecutor } from "@/features/executions/types";
 import { openAiChannel } from "@/inngest/channels/openai";
 import prisma from "@/lib/db";
+import { decrypt } from "@/lib/encryption";
 
 Handlebars.registerHelper("json", (context) => {
   const jsonString = JSON.stringify(context, null, 2);
@@ -84,13 +85,12 @@ export const openAiExecutor: NodeExecutor<OpenAiData> = async ({
     throw new NonRetriableError("OpenAI node: Credential not found");
   }
   const openai = createOpenAI({
-      apiKey: credential.value,
+      apiKey: decrypt(credential.value),
   });
 
   const openrouter = createOpenAI({
-    apiKey: process.env.OPENROUTER_API_KEY,
+    apiKey: process.env.OPENROUTER_API_KEY || decrypt(credential.value),
     baseURL: 'https://openrouter.ai/api/v1',
-
   });
 
   try {
