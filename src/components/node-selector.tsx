@@ -39,6 +39,48 @@ const triggerNodes: NodeTypeOption[] = [
     description: "Runs the flow when a Google Form is submitted",
     icon: "/logos/googleform.svg",
   },
+  {
+    type: NodeType.GOOGLE_SHEET_TRIGGER,
+    label: "Google Sheet",
+    description: "Runs the flow when a new record is added to a sheet",
+    icon: "/logos/googlesheet.svg",
+  },
+  {
+    type: NodeType.GMAIL_TRIGGER,
+    label: "Gmail",
+    description: "Runs the flow when a new email arrives",
+    icon: "/logos/gmail.svg",
+  },
+    {
+    type: NodeType.GEMINI,
+    label: "Gemini",
+    description: "Uses Google Gemini to generate text",
+    icon: "/logos/gemini.svg",
+  },
+  {
+    type: NodeType.OPENAI,
+    label: "OpenAI",
+    description: "Uses OpenAI to generate text",
+    icon: "/logos/openai.svg",
+  },
+  {
+    type: NodeType.ANTHROPIC,
+    label: "Anthropic",
+    description: "Uses Anthropic to generate text",
+    icon: "/logos/anthropic.svg",
+  },
+    {
+    type: NodeType.DISCORD,
+    label: "Discord",
+    description: "Send a message to Discord",
+    icon: "/logos/discord.svg",
+  },
+  {
+    type: NodeType.SLACK,
+    label: "Slack",
+    description: "Send a message to Slack",
+    icon: "/logos/slack.svg",
+  },
 ];
 
 const executionNodes: NodeTypeOption[] = [

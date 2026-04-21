@@ -37,8 +37,8 @@ export const auth = betterAuth({
                 checkout({
                     products: [
                         {
-                            productId: "66d669c9-1725-4f66-a377-c7ec8f08d95b",
-                            slug: "nexflow-Pro" // Custom slug for easy reference in Checkout URL, e.g. /checkout/nexflow-Pro
+                            productId: "a5885f03-627a-4e86-a9d4-458d722e00c1",
+                            slug: "Nexflow-Pro" // Custom slug for easy reference in Checkout URL, e.g. /checkout/nexflow-Pro
                         }
                     ],
                     successUrl: process.env.POLAR_SUCCESS_URL,

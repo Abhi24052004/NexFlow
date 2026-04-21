@@ -5,8 +5,10 @@ import { inngest } from "@/inngest/client";
 import { google } from '@ai-sdk/google';
 import { generateText } from 'ai';
 import { workflowRouter } from '@/features/workflows/server/routers';
+import { credentialsRouter } from '@/features/credentials/server/routers';
 
 export const appRouter = createTRPCRouter({
+    credentials: credentialsRouter,
 
   workflows:workflowRouter,
 
