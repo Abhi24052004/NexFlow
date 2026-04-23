@@ -32,6 +32,23 @@ import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 
+const isValidHeadersJson = (value?: string) => {
+  if (!value?.trim()) {
+    return true;
+  }
+
+  try {
+    const parsed = JSON.parse(value);
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+      return false;
+    }
+
+    return Object.values(parsed).every((headerValue) => typeof headerValue === "string");
+  } catch {
+    return false;
+  }
+};
+
 const formSchema = z.object({
   variableName: z
     .string()
@@ -42,6 +59,13 @@ const formSchema = z.object({
    endpoint: z.string()
     .min(1, { message: "Please enter a valid URL" }),
   method: z.enum(["GET", "POST", "PUT", "PATCH", "DELETE"]),
+  authToken: z.string().optional(),
+  headers: z
+    .string()
+    .optional()
+    .refine(isValidHeadersJson, {
+      message: "Headers must be a valid JSON object with string values",
+    }),
   body: z
     .string()
     .optional()
@@ -68,6 +92,8 @@ export const HttpRequestDialog = ({
       variableName: defaultValues.variableName || "",
       endpoint: defaultValues.endpoint || "",
       method: defaultValues.method || "GET",
+      authToken: defaultValues.authToken || "",
+      headers: defaultValues.headers || "",
       body: defaultValues.body || "",
     },
   });
@@ -79,6 +105,8 @@ export const HttpRequestDialog = ({
         variableName: defaultValues.variableName || "",
         endpoint: defaultValues.endpoint || "",
         method: defaultValues.method || "GET",
+        authToken: defaultValues.authToken || "",
+        headers: defaultValues.headers || "",
         body: defaultValues.body || "",
       });
     }
@@ -87,6 +115,7 @@ export const HttpRequestDialog = ({
   const watchVariableName = form.watch("variableName") || "myApiCall";
   const watchMethod = form.watch("method");
   const showBodyField = ["POST", "PUT", "PATCH"].includes(watchMethod);
+  const showAuthTokenField = ["GET", "POST", "PUT", "PATCH", "DELETE"].includes(watchMethod);
 
   const handleSubmit = (values: z.infer<typeof formSchema>) => {
     onSubmit(values);
@@ -176,6 +205,49 @@ export const HttpRequestDialog = ({
                 </FormItem>
               )}
             />
+            {showAuthTokenField && (
+              <FormField
+                control={form.control}
+                name="authToken"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Authorization Token</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="{{userToken}}"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                        Optional token for Authorization header (works for GET/POST/PUT/PATCH/DELETE). Templates are supported and sent as Bearer token.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+              <FormField
+                control={form.control}
+                name="headers"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Custom Headers (JSON)</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder={
+                          '{\n  "x-api-token": "{{apiToken}}",\n  "X-Source": "nexflow"\n}'
+                        }
+                        className="min-h-[100px] font-mono text-sm"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Optional headers object. Values support Handlebars templates and are merged with Authorization.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             {showBodyField && (
               <FormField
                 control={form.control}
