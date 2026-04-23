@@ -13,6 +13,8 @@ type HttpRequestNodeData = {
   variableName?: string;
   endpoint?: string;
   method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+  authToken?: string;
+  headers?: Record<string, string>;
   body?: string;
 };
 
@@ -32,13 +34,22 @@ export const HttpRequestNode = memo((props: NodeProps<HttpRequestNodeType>) => {
   const handleOpenSettings = () => setDialogOpen(true);
 
   const handleSubmit = (values: HttpRequestFormValues) => {
+    const parsedHeaders = values.headers?.trim()
+      ? (JSON.parse(values.headers) as Record<string, string>)
+      : undefined;
+
     setNodes((nodes) => nodes.map((node) => {
       if (node.id === props.id) {
         return {
           ...node,
           data: {
             ...node.data,
-            ...values,
+            variableName: values.variableName,
+            endpoint: values.endpoint,
+            method: values.method,
+            authToken: values.authToken || undefined,
+            body: values.body || undefined,
+            headers: parsedHeaders,
           }
         }
       }
@@ -57,7 +68,10 @@ export const HttpRequestNode = memo((props: NodeProps<HttpRequestNodeType>) => {
         open={dialogOpen}
         onOpenChange={setDialogOpen}
         onSubmit={handleSubmit}
-        defaultValues={nodeData}
+        defaultValues={{
+          ...nodeData,
+          headers: nodeData.headers ? JSON.stringify(nodeData.headers, null, 2) : "",
+        }}
       />
       <BaseExecutionNode
         {...props}
