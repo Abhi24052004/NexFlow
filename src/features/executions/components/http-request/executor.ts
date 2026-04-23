@@ -15,6 +15,8 @@ type HttpRequestData = {
     variableName: string;
     endpoint: string;
     method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+    authToken?: string;
+    headers?: Record<string, string>;
     body?: string;
 };
 
@@ -69,13 +71,32 @@ export const httpRequestExecutor: NodeExecutor<HttpRequestData> = async ({
         const result = await step.run("http-request", async () => {
             const endpoint = Handlebars.compile(data.endpoint)(context);
             const method = data.method;
+            const headers: Record<string, string> = {};
 
-            const options: KyOptions = { method };
+            if (data.authToken?.trim()) {
+                const resolvedToken = Handlebars.compile(data.authToken)(context).trim();
+                if (resolvedToken) {
+                    headers.Authorization = `Bearer ${resolvedToken}`;
+                }
+            }
+
+            if (data.headers) {
+                for (const key in data.headers) {
+                    headers[key] = Handlebars.compile(data.headers[key])(context);
+                }
+            }
+
+            const options: KyOptions = {
+                method,
+                headers,
+            };
+
             if (["POST", "PUT", "PATCH"].includes(method)) {
                 const resolved = Handlebars.compile(data.body || "{}")(context);
                 JSON.parse(resolved);
                 options.body = resolved;
                 options.headers = {
+                    ...headers,
                     "Content-Type": "application/json",
                 };
             }
